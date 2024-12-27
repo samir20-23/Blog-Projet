@@ -1,0 +1,11 @@
+@startuml
+actor Admin
+actor Visitor
+
+rectangle BlogArticle {
+    Admin -- (Delete Article)
+    Admin -- (Create Article)
+    Admin -- (Afficher Articles)
+    Visitor -- (Afficher Articles)
+}
+@enduml
