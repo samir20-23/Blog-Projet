@@ -63,6 +63,8 @@ Here are the steps to create a Laravel project using AdminLTE and Laravel UI:
 
 11. (Optional) Configure routes, views, and controllers to use AdminLTE layout.
 
+
+12. database sql:
  ```bash
 -- phpMyAdmin SQL Dump
 -- version 5.2.1
