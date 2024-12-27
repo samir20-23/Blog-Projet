@@ -1,21 +1,35 @@
 classDiagram
     class User {
-        +id: int
-        +name: string
-        +email: string
-        +password: string
+        +id
+        +name
+        +email
+        +password
     }
 
     class Article {
-        +id: int
-        +title: string
-        +content: string
+        +id
+        +title
+        +content
+        +userId
+        +categoryId
+        +tags
+    }
+
+    class Comment {
+        +id
+        +content
+        +userId
+        +articleId
+    }
+
+    class Tag {
+        +id
+        +name
     }
 
     class Category {
-        +id: int
-        +name: string
+        +id
+        +name
     }
 
-    User "1" --> "0..*" Article : writes
-    Category "1" --> "0..*" Article : categories
+   
