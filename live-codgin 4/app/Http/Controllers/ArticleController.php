@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use App\Models\Category;
+use App\Models\user;
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
@@ -24,6 +25,9 @@ class ArticleController extends Controller
      */
     public function create()
     {
+        $categories = User::all(); // Fetch categories for dropdown
+        return view('articles.create', compact('users'));
+
         $categories = Category::all(); // Fetch categories for dropdown
         return view('articles.create', compact('categories'));
     }
@@ -31,6 +35,7 @@ class ArticleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    
     public function store(Request $request)
     {
 
