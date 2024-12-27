@@ -1,62 +1,59 @@
-<div>
-</dev>
-<div id="badges"  align="center">
+
+
+```html
+<div id="badges" align="center">
 
 [![Typing SVG](https://readme-typing-svg.herokuapp.com/?color=63CF15&lines=L+A+R+A+V+E+L)](https://git.io/typing-svg)
-  
-  </div>
 
+</div>
+```
 
-
-
-Here are the steps to create a Laravel project using AdminLTE and Laravel UI:
-
-1. Create a new Laravel project:
+1. Create a new Laravel project:  
    ```bash
    composer create-project laravel/laravel project_name
    ```
 
-2. Navigate into the project directory:
+2. Navigate into the project directory:  
    ```bash
    cd project_name
    ```
 
-3. Install Laravel UI:
+3. Install Laravel UI:  
    ```bash
    composer require laravel/ui
    ```
 
-4. Generate authentication scaffolding:
+4. Generate authentication scaffolding:  
    ```bash
    php artisan ui bootstrap --auth
    ```
 
-5. Install NPM dependencies:
+5. Install NPM dependencies:  
    ```bash
    npm install
    ```
 
-6. Install AdminLTE package via NPM:
+6. Install AdminLTE package via NPM:  
    ```bash
    npm install admin-lte
    ```
 
-7. Publish the AdminLTE assets (if needed):
+7. Publish the AdminLTE assets:  
    ```bash
    npm run dev
    ```
 
-8. Set up your `resources/js/app.js` to include AdminLTE:
+8. Set up your `resources/js/app.js` to include AdminLTE:  
    ```js
    import 'admin-lte';
    ```
 
-9. Modify `resources/sass/app.scss` to import AdminLTE styles:
+9. Modify `resources/sass/app.scss` to import AdminLTE styles:  
    ```scss
    @import "~admin-lte/dist/css/adminlte.min.css";
    ```
 
-10. Run the development server:
+10. Run the development server:  
     ```bash
     npm run dev
     ```
