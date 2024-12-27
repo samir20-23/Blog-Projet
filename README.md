@@ -1,12 +1,9 @@
 
-
-```html
 <div id="badges" align="center">
 
 [![Typing SVG](https://readme-typing-svg.herokuapp.com/?color=63CF15&lines=L+A+R+A+V+E+L)](https://git.io/typing-svg)
 
 </div>
-```
 
 1. Create a new Laravel project:  
    ```bash
