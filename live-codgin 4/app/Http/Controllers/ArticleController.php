@@ -1,5 +1,5 @@
 <?php
-
+// prototoype
 namespace App\Http\Controllers;
 
 use App\Models\Article;
