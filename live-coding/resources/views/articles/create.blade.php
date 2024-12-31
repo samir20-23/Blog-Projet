@@ -24,15 +24,24 @@
                     <label for="category_id">Category</label>
                     <select name="category_id" id="category_id" class="form-control">
                         <option value="">Select Category</option>
-                        @foreach($categories as $category)
+                        @foreach ($categories as $category)
                             <option value="{{ $category->id }}">{{ $category->name }}</option>
                         @endforeach
                     </select>
+                    <label for="tags_id">Tags</label>
+                    <select name="tags_id" id="tags_id">
+                        <option value="">Select a Tag</option>
+                        @foreach ($tags as $tag)
+                            <option value="{{ $tag->id }}">{{ $tag->name }}</option>
+                        @endforeach
+                    </select>
+
                 </div>
-                
+
                 <button type="submit" class="btn btn-success">Save Article</button>
                 <a href="{{ route('articles.index') }}" class="btn btn-secondary">Cancel</a>
             </form>
+
         </div>
     </div>
 @endsection

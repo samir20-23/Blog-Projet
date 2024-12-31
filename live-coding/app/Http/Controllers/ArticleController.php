@@ -25,26 +25,29 @@ class ArticleController extends Controller
     public function store(Request $request)
     {
         $userId = auth()->id();
-
+    
         if (!$userId) {
             throw new \Exception('User ID is null');
         }
-
+    
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required',
             'category_id' => 'nullable|exists:categories,id',
+            'tags_id' => 'nullable|exists:tags,id', // Add validation for tags_id
         ]);
-
+    
         Article::create([
             'title' => $validatedData['title'],
             'content' => $validatedData['content'],
             'category_id' => $validatedData['category_id'] ?? null,
+            'tags_id' => $validatedData['tags_id'] ?? 1, // Default value
             'user_id' => $userId,
         ]);
-
+    
         return redirect()->route('articles.index')->with('success', 'Article created successfully!');
     }
+    
 
     public function edit(string $id)
     {
