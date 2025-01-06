@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\User;
 use App\Models\Article;
 use App\Models\Category;
-use App\Models\User;
+use App\Models\Tag;
+
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
@@ -19,7 +20,9 @@ class ArticleController extends Controller
     {
         $users = User::all();
         $categories = Category::all();
-        return view('articles.create', compact('users', 'categories'));
+        $tags = Tag::all();
+
+        return view('articles.create', compact('users', 'categories','tags'));
     }
 
     public function store(Request $request)
