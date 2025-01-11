@@ -2,54 +2,71 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">All Tables</h3>
-            {{-- <a href="{{ route('tables.create') }}" class="btn btn-success float-right">Add New tables</a> --}}
-        </div>
-        <div class="card-body">
-            
-                @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Box for Articles -->
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="small-box bg-info p-4 rounded shadow">
+                    <div class="inner text-white">
+                        <h4>Articles</h4>
                     </div>
-                @endif
+                    <div class="icon text-white">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <a href="{{ route('articles.index') }}" class="small-box-footer text-white d-flex justify-content-between align-items-center">
+                        Plus de détails
+                        <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
 
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>articles</th>
-                            <th>Categorys</th>
-                            <th>tags</th>
-                            <th>comments</th>
-                        </tr>
-                    </thead>
-                    <tbody> 
-                            <tr> 
-                                <td>
-                                    <div style="display: flex;">   
-                                        <a  href="{{ route('articles.index') }}" class="btn btn-danger btn-sm" style="width:100%; height:90px;">Articles</a>
-                                </div>
-                                </td>
-                                <td>
-                                    <div style="display: flex;">   
-                                        <a  href="{{ route('categorys.index') }}" class="btn btn-danger btn-sm" style="width:100%; height:90px;">categorys</a>
-                                </div>
-                                </td>
-                                 <td>
-                                    <div style="display: flex;">   
-                                        <a  href="{{ route('tags.index') }}" class="btn btn-danger btn-sm" style="width:100%; height:90px;">tags</a>
-                                </div>
-                                </td>
-                               <td>
-                                    <div style="display: flex;">   
-                                        <a  href="{{ route('comments.index') }}" class="btn btn-danger btn-sm" style="width:100%; height:90px;">comments</a>
-                                </div>
-                                </td>
-                            </tr>  
-                    </tbody>
-                </table>
+            <!-- Box for Categories -->
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="small-box bg-success p-4 rounded shadow">
+                    <div class="inner text-white">
+                        <h4>Categories</h4>
+                    </div>
+                    <div class="icon text-white">
+                        <i class="fa fa-cogs"></i>
+                    </div>
+                    <a href="{{ route('categorys.index') }}" class="small-box-footer text-white d-flex justify-content-between align-items-center">
+                        Plus de détails
+                        <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
 
+            <!-- Box for Tags -->
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="small-box bg-warning p-4 rounded shadow">
+                    <div class="inner text-white">
+                        <h4>Tags</h4>
+                    </div>
+                    <div class="icon text-white">
+                        <i class="fa fa-tags"></i>
+                    </div>
+                    <a href="{{ route('tags.index') }}" class="small-box-footer text-white d-flex justify-content-between align-items-center">
+                        Plus de détails
+                        <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Box for Comments -->
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="small-box bg-danger p-4 rounded shadow">
+                    <div class="inner text-white">
+                        <h4>Comments</h4>
+                    </div>
+                    <div class="icon text-white">
+                        <i class="fa fa-comments"></i>
+                    </div>
+                    <a href="{{ route('comments.index') }}" class="small-box-footer text-white d-flex justify-content-between align-items-center">
+                        Plus de détails
+                        <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
