@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
-use App\Models\Category;
-use App\Models\Tags;
+use App\Models\Category; 
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -12,7 +12,7 @@ class ArticleController extends Controller
 {
     public function index()
     {
-        $articles = Article::with(['category', 'user'])->get();
+        $articles = Article::with(['category', 'tag'])->get();
         return view('articles.index', compact('articles'));
     }
 
@@ -20,7 +20,7 @@ class ArticleController extends Controller
     {
         $users = User::all();
         $categories = Category::all();
-        $tags = Tags::all();
+        $tags = Tag::all();
         return view('articles.create', compact('users', 'categories', 'tags'));
     }
 
@@ -60,7 +60,7 @@ class ArticleController extends Controller
     {
         $article = Article::findOrFail($id);
         $categories = Category::all();
-        $tags = Tags::all();  
+        $tags = Tag::all();  
         return view('articles.edit', compact('article', 'categories', 'tags'));   
     }
     

@@ -23,7 +23,7 @@ class Article extends Model
     }
     
     public function tag() {
-        return $this->belongsTo(Tags::class);
+        return $this->belongsTo(Tag::class);
     }
     
     

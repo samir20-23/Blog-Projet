@@ -1,6 +1,5 @@
 @extends('adminlte::page')
-
-@section('title', 'Articles')
+ 
 
 @section('content_header')
     <h1>Articles</h1>
@@ -27,7 +26,7 @@
                         <tr>
                             <th>Title</th>
                             <th>Category</th>
-                            <th>Author</th>
+                            <th>Tags</th> 
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -37,7 +36,7 @@
                                 <td>{{ $article->title }}</td>
                                 <td>{{ $article->category->name ?? 'No Category' }}</td> <!-- Display category name -->
 
-                                <td>{{ $article->user->name ?? 'Unknown Author' }}</td> <!-- Display author name -->
+                                <td>{{ $article->tag->name ?? '...' }}</td> <!-- Display author name --> 
                                 <td>
                                     <div style="display: flex;">
                                     <form action="{{ route('articles.destroy', $article->id) }}" method="POST"

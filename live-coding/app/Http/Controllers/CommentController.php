@@ -16,12 +16,12 @@ class CommentController extends Controller
         return view('comments.index', compact('comments'));
     }
 
-    public function create()
-    {
-        $users = User::all();
-        $articles = Article::all(); 
-        return view('comments.create', compact('users', 'articles'));
-    }
+    // public function create()
+    // {
+    //     $users = User::all();
+    //     $articles = Article::all();
+    //     return view('comments.create', compact('users', 'articles'));
+    // }
 
     public function store(Request $request)
     {
@@ -29,53 +29,53 @@ class CommentController extends Controller
         if (!auth()->check()) {
             return redirect()->route('login')->with('error', 'You must be logged in to create an article.');
         }
-    
+
         $userId = auth()->id();
-    
+
         if (!$userId) {
             throw new \Exception('User ID is null');
         }
-    
-        $validatedData = $request->validate([ 
+
+        $validatedData = $request->validate([
             'content' => 'required',
             'article_id' => 'nullable|exists:comment,id',
             'tags_id' => 'nullable|exists:tags,id', // Add validation for tags_id
         ]);
-    
-        Article::create([ 
+
+        Article::create([
             'content' => $validatedData['content'],
             'user_id' => $userId,
-            'article_id' => $validatedData['article_id'] ?? null, 
-        ]);
-    
-        return redirect()->route('comments.index')->with('success', 'Article created successfully!');
-    }   
-    
-
-    public function edit(string $id)
-    {
-        $comment = Comment::findOrFail($id);
-        $articles = Article::all(); 
-        return view('comments.edit', compact('comment', 'articles'));   
-    }
-    
-
-    public function update(Request $request, string $id)
-    {
-        $validatedData = $request->validate([ 
-            'content' => 'required',
-            'article_id' => 'nullable|exists:articles,id',
-        ]);
-
-        $comment = Comment::findOrFail($id);
-
-        $comment->update([ 
-            'content' => $validatedData['content'],
             'article_id' => $validatedData['article_id'] ?? null,
         ]);
 
-        return redirect()->route('comments.index')->with('success', 'Comment updated successfully!');
+        return redirect()->route('comments.index')->with('success', 'Article created successfully!');
     }
+
+
+    // public function edit(string $id)
+    // {
+    //     $comment = Comment::findOrFail($id);
+    //     $articles = Article::all();
+    //     return view('comments.edit', compact('comment', 'articles'));
+    // }
+
+
+    // public function update(Request $request, string $id)
+    // {
+    //     $validatedData = $request->validate([
+    //         'content' => 'required',
+    //         'article_id' => 'nullable|exists:articles,id',
+    //     ]);
+
+    //     $comment = Comment::findOrFail($id);
+
+    //     $comment->update([
+    //         'content' => $validatedData['content'],
+    //         'article_id' => $validatedData['article_id'] ?? null,
+    //     ]);
+
+    //     return redirect()->route('comments.index')->with('success', 'Comment updated successfully!');
+    // }
 
     public function destroy(string $id)
     {

@@ -1,4 +1,4 @@
- <?php
+<?php
 
 namespace App\Http\Middleware;
 
@@ -7,19 +7,12 @@ use Illuminate\Http\Request;
 
 class RoleMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  string  $role
-     * @return mixed
-     */
     public function handle($request, Closure $next, $role)
     {
         if (auth()->check() && auth()->user()->role === $role) {
             return $next($request);
         }
-        abort(403, 'Unauthorized');
+
+        return redirect()->route('articles.index')->with('error', 'You are not authorized to access this page.');
     }
 }
