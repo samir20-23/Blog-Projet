@@ -1,7 +1,14 @@
-<!-- resources/views/home.blade.php -->
 @extends('layouts.app')
 
 @section('content')
+<div class="container mt-4">
+    @if(session('error'))
+        <div class="alert alert-danger" id="error-message">
+            {{ session('error') }}
+        </div>
+    @endif
+
+    
     <div class="container mt-4">
         <div class="row">
             <!-- Box for Articles -->
@@ -19,7 +26,7 @@
                     </a>
                 </div>
             </div>
-
+@if(Auth::user()->role == 'admin')
             <!-- Box for Categories -->
             <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
                 <div class="small-box bg-success p-4 rounded shadow">
@@ -67,9 +74,23 @@
                     </a>
                 </div>
             </div>
+            @endif
         </div>
     </div>
+</div>
+
+@push('scripts')
+    <script>
+        // Check if there's an error message, and hide it after 3 seconds
+        window.onload = function() {
+            let errorMessage = document.getElementById('error-message');
+            if (errorMessage) {
+                setTimeout(function() {
+                    errorMessage.style.display = 'none';
+                }, 3000); // 3000 milliseconds = 3 seconds
+            }
+        }
+    </script>
+@endpush
+
 @endsection
-
-
- 

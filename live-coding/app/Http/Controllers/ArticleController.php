@@ -7,17 +7,36 @@ use App\Models\Category;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route; 
 
 class ArticleController extends Controller
 {
+    public function checkRole()
+    {
+        // return   $this->checkRole();
+        if (!auth()->check()) {
+            session()->flash('error', 'You must be logged in to view this page.');
+            redirect()->route('login');
+        } else if (auth()->user()->role == 'user') {
+            return redirect()->route('articles.index')->with('error', 'You must be an admin to view this page.');
+        }
+        return null;
+    } 
+
     public function index()
     {
-        $articles = Article::with(['category', 'tag'])->get();
-        return view('articles.index', compact('articles'));
+
+   
+                  
+                      $articles = Article::with(['category', 'tag'])->get();
+                      return view('articles.index', compact('articles'));
+ 
+    
     }
 
     public function create()
     {
+
         $users = User::all();
         $categories = Category::all();
         $tags = Tag::all();
@@ -26,10 +45,9 @@ class ArticleController extends Controller
 
     public function store(Request $request)
     {
+
         // Check if user is logged in
-        if (!auth()->check()) {
-            return redirect()->route('login')->with('error', 'You must be logged in to create an article.');
-        }
+      
     
         $userId = auth()->id();
     
@@ -58,6 +76,7 @@ class ArticleController extends Controller
 
     public function edit(string $id)
     {
+        return   $this->checkRole();
         $article = Article::findOrFail($id);
         $categories = Category::all();
         $tags = Tag::all();  
@@ -66,7 +85,8 @@ class ArticleController extends Controller
     
 
     public function update(Request $request, string $id)
-    {
+    {return   $this->checkRole();
+
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required',
@@ -85,7 +105,8 @@ class ArticleController extends Controller
     }
 
     public function destroy(string $id)
-    {
+    {return   $this->checkRole();
+
         $article = Article::findOrFail($id);
         $article->delete();
         return redirect()->route('articles.index')->with('success', 'Article deleted successfully.');
@@ -93,6 +114,7 @@ class ArticleController extends Controller
 
     public function home()
     {
+
         $articles = Article::with('category')->get();
         return view('home', ['articles' => $articles]);
     }

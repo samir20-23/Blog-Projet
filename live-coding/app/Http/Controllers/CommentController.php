@@ -10,10 +10,26 @@ use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
+    public function checkRole()
+    {
+        // return   $this->checkRole();
+        if (!auth()->check()) {
+            session()->flash('error', 'You must be logged in to view this page.');
+            redirect()->route('login');
+        } else if (auth()->user()->role == 'user') {
+            return redirect()->route('home')->with('error', 'You must be an admin to view this page.');
+        }
+  
+    } 
+    
     public function index()
     {
-        $comments = Comment::with(['article', 'user'])->get();
-        return view('comments.index', compact('comments'));
+         return   $this->checkRole();
+  
+            $role = auth()->user()->role;
+            $comments = Comment::with(['article', 'user'])->get();
+            return view('comments.index', compact('comments','role'));
+       
     }
 
     // public function create()
@@ -25,10 +41,9 @@ class CommentController extends Controller
 
     public function store(Request $request)
     {
+         return   $this->checkRole();
         // Check if user is logged in
-        if (!auth()->check()) {
-            return redirect()->route('login')->with('error', 'You must be logged in to create an article.');
-        }
+       
 
         $userId = auth()->id();
 
@@ -79,6 +94,7 @@ class CommentController extends Controller
 
     public function destroy(string $id)
     {
+         return   $this->checkRole();
         $comment = Comment::findOrFail($id);
         $comment->delete();
         return redirect()->route('comments.index')->with('success', 'Comment deleted successfully.');
@@ -86,6 +102,7 @@ class CommentController extends Controller
 
     public function home()
     {
+         return   $this->checkRole();
         $comments = Comment::with('Comment')->get();
         return view('home', ['comments' => $comments]);
     }

@@ -7,6 +7,8 @@
 @endsection
 
 @section('content')
+@if(Auth::user()->role == 'admin')
+
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">All Categorys</h3>
@@ -34,17 +36,17 @@
                                 <td>{{ $category->name }}</td> 
                                 <td>
                                     <div style="display: flex;">
-                                    <form action="{{ route('categorys.destroy', $category->id) }}" method="POST"
-                                        style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm"
-                                            onclick="return confirm('Are you sure you want to delete this category?')">Delete</button>
-                                    </form>
-                                    <form action="{{route('categorys.edit',$category->id)}}" method="GET" >
-                                        <button class="btn  btn-sm " style="background: rgb(218, 242, 255)">Edit</button>
-                                    </form>
-                                </div>
+                                        <form action="{{ route('categorys.destroy', $category->id) }}" method="POST"
+                                            style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm"
+                                                onclick="return confirm('Are you sure you want to delete this category?')">Delete</button>
+                                        </form>
+                                        <form action="{{ route('categorys.edit', $category->id) }}" method="GET">
+                                            <button class="btn btn-sm" style="background: rgb(218, 242, 255)">Edit</button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
@@ -53,4 +55,6 @@
             @endif
         </div>
     </div>
+@endif
+ 
 @endsection

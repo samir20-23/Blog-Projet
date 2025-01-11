@@ -7,6 +7,8 @@
 @endsection
 
 @section('content')
+@if(Auth::user()->role == 'admin')
+
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">All Comments</h3> 
@@ -52,4 +54,5 @@
             @endif
         </div>
     </div>
+    @endif
 @endsection
