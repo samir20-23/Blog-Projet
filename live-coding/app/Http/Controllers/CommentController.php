@@ -31,7 +31,7 @@ class CommentController extends Controller
             return view('comments.index', compact('comments','role'));
        
     }
-
+//  addin ad asdfa sdf
     // public function create()
     // {
     //     $users = User::all();
@@ -46,7 +46,7 @@ class CommentController extends Controller
        
 
         $userId = auth()->id();
-
+// asfasdgfadsfga
         if (!$userId) {
             throw new \Exception('User ID is null');
         }
