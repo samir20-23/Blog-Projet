@@ -3,63 +3,90 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Models\Article;
+use App\Models\User;
+
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $comments = Comment::with(['article', 'user'])->get();
+        return view('comments.index', compact('comments'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $users = User::all();
+        $articles = Article::all(); 
+        return view('comments.create', compact('users', 'articles'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        // Check if user is logged in
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'You must be logged in to create an article.');
+        }
+    
+        $userId = auth()->id();
+    
+        if (!$userId) {
+            throw new \Exception('User ID is null');
+        }
+    
+        $validatedData = $request->validate([ 
+            'content' => 'required',
+            'article_id' => 'nullable|exists:comment,id',
+            'tags_id' => 'nullable|exists:tags,id', // Add validation for tags_id
+        ]);
+    
+        Article::create([ 
+            'content' => $validatedData['content'],
+            'user_id' => $userId,
+            'article_id' => $validatedData['article_id'] ?? null, 
+        ]);
+    
+        return redirect()->route('comments.index')->with('success', 'Article created successfully!');
+    }   
+    
+
+    public function edit(string $id)
+    {
+        $comment = Comment::findOrFail($id);
+        $articles = Article::all(); 
+        return view('comments.edit', compact('comment', 'articles'));   
+    }
+    
+
+    public function update(Request $request, string $id)
+    {
+        $validatedData = $request->validate([ 
+            'content' => 'required',
+            'article_id' => 'nullable|exists:articles,id',
+        ]);
+
+        $comment = Comment::findOrFail($id);
+
+        $comment->update([ 
+            'content' => $validatedData['content'],
+            'article_id' => $validatedData['article_id'] ?? null,
+        ]);
+
+        return redirect()->route('comments.index')->with('success', 'Comment updated successfully!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Comment $comment)
+    public function destroy(string $id)
     {
-        //
+        $comment = Comment::findOrFail($id);
+        $comment->delete();
+        return redirect()->route('comments.index')->with('success', 'Comment deleted successfully.');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Comment $comment)
+    public function home()
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Comment $comment)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Comment $comment)
-    {
-        //
+        $comments = Comment::with('Comment')->get();
+        return view('home', ['comments' => $comments]);
     }
 }

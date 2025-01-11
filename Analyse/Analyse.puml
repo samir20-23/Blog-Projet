@@ -1,33 +1,103 @@
 @startuml
-left to right direction
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam linetype ortho_crossover 20
+skinparam linetype ortho_crossover_length 20
+skinparam linetype ortho_crossover_width 20
+skinparam linetype ortho_crossover_shape circle
+skinparam linetype ortho_crossover_color red
+skinparam linetype ortho_crossover_spacing 20
+skinparam linetype ortho_crossover_margin 20
 
-actor User
-actor Admin
-
-rectangle "Blog System" {
-    (View Specific Article) as UC1
-    (View All Articles) as UC2
-    (Authenticate User) as UC3
-    (Add Comments) as UC4
-    (Cannot Access Dashboard) as UC5
-    (Authenticate Admin) as UC6
-    (Access Dashboard) as UC7
-    (Manage Tags) as UC8
-    (Manage Categories) as UC9
-    (CRUD Articles) as UC10
-    (Manage Comments) as UC11
-
-    User --- UC1
-    User --- UC2
-    User --- UC3
-    User --- UC4
-    User --- UC5
-
-    Admin --- UC6
-    Admin --- UC7
-    Admin --- UC8
-    Admin --- UC9
-    Admin --- UC10
-    Admin --- UC11
+skinparam class {
+    BackgroundColor white
+    ArrowColor blue
+    BorderColor black
+    BorderThickness 2
+    FontColor black
+    FontSize 15
+    FontStyle bold
+    HeaderFontColor black
+    HeaderFontSize 15 
+    HeaderFontStyle bold
+    HeaderBackgroundColor white
+    HeaderBorderColor black
+    HeaderBorderThickness 2
+    HeaderFontColor black
+    HeaderFontSize 15
+    HeaderFontStyle bold
+    HeaderPosition top 
+    AttributeBackgroundColor white
+    AttributeBorderColor black
+    AttributeBorderThickness 2
+    AttributeFontColor black
+    AttributeFontSize 15
+    AttributeFontStyle bold
+    AttributePosition top
+    Shadowing true
+    RoundCorner 10
+    AttributeIconSize 0 
 }
+left to right direction
+' Entities
+
+
+class Admin {
+    +id
+    +name
+    +email
+    +password
+    +role
+}
+
+class User {
+    +id
+    +name
+    +email
+    +password
+    +role
+}
+
+class Article {
+    +id
+    +title
+    +content
+    +userId
+    +categoryId
+    +tagsId
+    
+}
+
+class Comment {
+    +id
+    +content
+    +userId
+    +articleId
+    
+}
+
+class Tag {
+    +id
+    +name
+}
+
+class Category {
+    +id
+    +name
+    +description
+}
+
+' Relationships
+Admin --> "manages" User
+Admin --> "manages" Article
+Admin --> "manages" Category
+Admin --> "manages" Tag
+
+User --> "adds" Comment
+User --> "writes" Article
+
+Article --> "has" Tag
+Article --> "belongs to" Category
+Article --> "has" Comment
+
 @enduml

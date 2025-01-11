@@ -2,64 +2,69 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\tags;
+use App\Models\Tags;
 use Illuminate\Http\Request;
 
 class TagsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $tags = Tags::all();
+        return view('tags.index', compact('tags'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
-    {
-        //
+    { 
+        $tags = Tags::all(); 
+        return view('tags.create', compact( 'tags'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        // Check if user is logged in
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'You must be logged in to create an tags.');
+        }
+
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+    
+        Tags::create([
+            'name' => $validatedData['name'],
+        ]);
+    
+        return redirect()->route('tags.index')->with('success', 'Tags created successfully!');
+    }   
+    
+
+    public function edit(string $id)
+    { 
+        $tags = Tags::findOrFail($id); 
+        return view('tags.edit', compact( 'tags'));   
+    }
+    
+
+    public function update(Request $request, string $id)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $tags = Tags::findOrFail($id);
+
+        $tags->update([
+            'name' => $validatedData['name'],
+        ]);
+
+        return redirect()->route('tags.index')->with('success', 'Tags updated successfully!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(tags $tags)
+    public function destroy(string $id)
     {
-        //
+        $tags = Tags::findOrFail($id);
+        $tags->delete();
+        return redirect()->route('tags.index')->with('success', 'Tags deleted successfully.');
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(tags $tags)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, tags $tags)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(tags $tags)
-    {
-        //
-    }
+   
 }

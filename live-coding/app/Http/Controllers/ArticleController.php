@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use App\Models\Category;
+use App\Models\Tags;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -19,11 +20,17 @@ class ArticleController extends Controller
     {
         $users = User::all();
         $categories = Category::all();
-        return view('articles.create', compact('users', 'categories'));
+        $tags = Tags::all();
+        return view('articles.create', compact('users', 'categories', 'tags'));
     }
 
     public function store(Request $request)
     {
+        // Check if user is logged in
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'You must be logged in to create an article.');
+        }
+    
         $userId = auth()->id();
     
         if (!$userId) {
@@ -46,15 +53,17 @@ class ArticleController extends Controller
         ]);
     
         return redirect()->route('articles.index')->with('success', 'Article created successfully!');
-    }
+    }   
     
 
     public function edit(string $id)
     {
         $article = Article::findOrFail($id);
         $categories = Category::all();
-        return view('articles.edit', compact('article', 'categories'));
+        $tags = Tags::all();  
+        return view('articles.edit', compact('article', 'categories', 'tags'));   
     }
+    
 
     public function update(Request $request, string $id)
     {
