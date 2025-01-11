@@ -10,3 +10,4 @@ class AdminController extends Controller
         return view('admin.dashboard'); // Make sure to create this Blade file
     }
 }
+// sdfgkjsdfg

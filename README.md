@@ -2,7 +2,11 @@
 <div>
 <div id="badges" align="center">
 
+<<<<<<< HEAD
 [![Typing SVG](https://readme-typing-svg.herokuapp.com/?color=63CF15&lines=Here+Hawe+To+start+App)](https://git.io/typing-svg)
+=======
+[![Typing SVG](https://readme-typing-svg.herokuapp.com/?color=63CF15&lines=Here+How+To+start+App)](https://git.io/typing-svg)
+>>>>>>> 38a1a3d5adc149b3b8a49289f3090f4fbdfb0ffd
 
 </div>
 
@@ -53,11 +57,14 @@
   ```
 
 ---
+<<<<<<< HEAD
  
 - for role :
   ```bash
   composer require spatie/laravel-permission
   ```
+=======
+>>>>>>> 38a1a3d5adc149b3b8a49289f3090f4fbdfb0ffd
 
 ### Step 3: Migrations and Database Setup
 - Run migrations to create necessary tables:

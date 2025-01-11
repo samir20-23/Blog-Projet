@@ -1,11 +1,17 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\User;
 use App\Models\Article;
+<<<<<<< HEAD
 use App\Models\Category; 
 use App\Models\Tag;
 use App\Models\User;
+=======
+use App\Models\Category;
+use App\Models\Tag;
+
+>>>>>>> 38a1a3d5adc149b3b8a49289f3090f4fbdfb0ffd
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route; 
 
@@ -40,7 +46,12 @@ class ArticleController extends Controller
         $users = User::all();
         $categories = Category::all();
         $tags = Tag::all();
+<<<<<<< HEAD
         return view('articles.create', compact('users', 'categories', 'tags'));
+=======
+
+        return view('articles.create', compact('users', 'categories','tags'));
+>>>>>>> 38a1a3d5adc149b3b8a49289f3090f4fbdfb0ffd
     }
 
     public function store(Request $request)

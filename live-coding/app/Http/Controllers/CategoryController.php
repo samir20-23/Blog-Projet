@@ -72,6 +72,10 @@ class CategoryController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
+        // askdjf;aklsdf
+        // asdfasdf
+        // asdfasdf
+        // asdfasdf
         $category = Category::findOrFail($id);
 
         $category->update([
