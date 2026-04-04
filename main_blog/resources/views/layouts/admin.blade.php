@@ -132,20 +132,6 @@
             </main>
         </div>
     </div>
-    <script>
-    $(window).on('load', function() {
-        // Normal behavior: hide when loaded
-        if ($('.preloader').length) {
-            $('.preloader').fadeOut('slow');
-        }
-    });
-
-    // Safety Timeout: Hide after 2 seconds even if load fails
-    setTimeout(function() {
-        if ($('.preloader').is(':visible')) {
-            $('.preloader').fadeOut('slow');
-        }
-    }, 2000);
-</script>
+    @yield('scripts')
 </body>
 </html>

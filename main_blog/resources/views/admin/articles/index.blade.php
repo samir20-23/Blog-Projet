@@ -3,6 +3,16 @@
 @section('header', app_term('articles'))
 
 @section('content')
+@php
+$articleImages = [
+    'https://thumb.r2.moele.me/t/29364/29354926/a-0120.jpg',    // Tailwind CSS
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTs0hz095PpqP23iVmUSB3Wbdqkjtz3f7LOQQ&s',         // CMS
+    'https://images.rawpixel.com/dark_image_png_social_square/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDI0LTEwL3RwNTQ5LWVsZW1lbnQtc2ktNDgtcC5wbmc.png',  // Minimalism
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrUdQoWRir1X-p-gcM3_ItgkMxOIEeAEfaSg&s',     // Laravel
+    'https://www.shutterstock.com/shutterstock/videos/3992980503/thumb/1.jpg?ip=x480',          // AI
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE-UC8GqcIwlw_2vEm_vnygUpHsV9IGKx_Qg&s',    // Business
+];
+@endphp
 <div class="mb-6 flex justify-between items-center">
     <div>
         <h1 class="text-2xl font-bold text-slate-800">{{ app_term('articles') }}</h1>
@@ -30,13 +40,13 @@
             <tr class="hover:bg-slate-50 transition-colors group">
                 <td class="px-6 py-4">
                     <div class="flex items-center">
-                        @if($article->featured_image)
-                            <img src="{{ asset('storage/'.$article->featured_image) }}" class="w-12 h-12 rounded-xl object-cover mr-4 shadow-sm border border-slate-100">
-                        @else
-                            <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 mr-4">
-                                <i class="fas fa-image"></i>
-                            </div>
-                        @endif
+                       @if($article->featured_image)
+    <img src="{{ asset('storage/'.$article->featured_image) }}" class="w-12 h-12 rounded-xl object-cover mr-4 shadow-sm border border-slate-100">
+@else
+    <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center mr-4 overflow-hidden">
+        <img src="{{ $articleImages[array_rand($articleImages)] }}" alt="aura" class="w-full h-full object-cover">
+    </div>
+@endif
                         <div class="max-w-xs overflow-hidden">
                             <p class="font-bold text-slate-800 truncate" title="{{ $article->title }}">{{ $article->title }}</p>
                             <p class="text-xs text-slate-400 font-mono">{{ $article->slug }}</p>

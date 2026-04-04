@@ -145,7 +145,7 @@
             @foreach($relatedArticles as $related)
             <a href="{{ route('articles.show', $related->slug) }}" class="group block space-y-6">
                 <div class="relative aspect-video rounded-[32px] overflow-hidden shadow-xl shadow-slate-200/50">
-                    <img src="{{ $related->featured_image ? asset('storage/'.$related->featured_image) : 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80' }}" 
+                    <img src="{{ $related->featured_image ? asset('storage/'.$related->featured_image) : 'https://img.freepik.com/free-photo/artistic-blurry-colorful-wallpaper-background_58702-8290.jpg?semt=ais_hybrid&w=740&q=80' }}" 
                          class="w-full h-full object-cover group-hover:scale-110 transition-soft">
                 </div>
                 <div>

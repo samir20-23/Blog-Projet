@@ -39,7 +39,7 @@
                 <div class="relative z-10 grid grid-cols-2 gap-4">
                     @foreach($featuredArticles as $featured)
                         <div class="rounded-3xl overflow-hidden aspect-[4/5] relative group shadow-2xl {{ $loop->first ? 'col-span-1 mt-12' : ($loop->iteration == 2 ? 'col-span-1' : 'col-span-2 -mt-12') }}">
-                            <img src="{{ $featured->featured_image ? asset('storage/'.$featured->featured_image) : 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80' }}" 
+                            <img src="{{ $featured->featured_image ? asset('storage/'.$featured->featured_image) : 'https://img.freepik.com/free-vector/gradient-nothern-lights-background_23-2148289560.jpg?semt=ais_incoming&w=740&q=80' }}" 
                                  class="w-full h-full object-cover transition-soft group-hover:scale-110" alt="{{ $featured->title }}">
                             <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-80"></div>
                             <div class="absolute bottom-0 p-8 w-full">
@@ -88,7 +88,7 @@
             @forelse($articles as $article)
             <div class="group product-card">
                 <div class="relative aspect-[4/5] rounded-3xl overflow-hidden mb-6 bg-slate-100 shadow-xl shadow-slate-200/50">
-                    <img src="{{ $article->featured_image ? asset('storage/'.$article->featured_image) : 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80' }}" 
+                    <img src="{{ $article->featured_image ? asset('storage/'.$article->featured_image) : 'https://img.freepik.com/free-photo/vivid-blurred-colorful-wallpaper-background_58702-3170.jpg?semt=ais_hybrid&w=740&q=80' }}" 
                          class="w-full h-full object-cover transition-soft group-hover:scale-110 product-image" alt="{{ $article->title }}">
                     
                     <div class="absolute inset-0 bg-slate-900/10 group-hover:bg-slate-900/20 transition-soft"></div>

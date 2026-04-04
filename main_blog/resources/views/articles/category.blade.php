@@ -31,7 +31,7 @@
             @forelse($articles as $article)
             <div class="group product-card">
                 <div class="relative aspect-[4/5] rounded-[40px] overflow-hidden mb-8 bg-slate-200 shadow-2xl shadow-slate-200/50">
-                    <img src="{{ $article->featured_image ? asset('storage/'.$article->featured_image) : 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80' }}" 
+                    <img src="{{ $article->featured_image ? asset('storage/'.$article->featured_image) : 'https://img.freepik.com/premium-psd/abstract-red-yellow-swirl-black_1283787-495.jpg?semt=ais_incoming&w=740&q=80' }}" 
                          class="w-full h-full object-cover transition-soft group-hover:scale-110 product-image" alt="{{ $article->title }}">
                     
                     <div class="absolute inset-0 bg-slate-900/10 group-hover:bg-slate-900/20 transition-soft"></div>
