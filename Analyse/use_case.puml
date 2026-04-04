@@ -1,0 +1,42 @@
+@startuml
+left to right direction
+actor "Visitor" as Visitor
+actor "Member" as Member
+actor "Author" as Author
+actor "Admin" as Admin
+
+package "CMS Starter Kit" {
+    usecase "Browse Home/Articles" as UC1
+    usecase "View Article Detail" as UC2
+    usecase "Register/Login" as UC3
+    usecase "Add Comment" as UC4
+    usecase "Manage Own Profile" as UC5
+    usecase "Create/Edit Own Article" as UC6
+    usecase "Upload Media" as UC7
+    usecase "Manage Categories" as UC8
+    usecase "Full Content Management" as UC9
+    usecase "Manage Users & Roles" as UC10
+    usecase "System Settings & Terminology" as UC11
+    usecase "View Activity Logs" as UC12
+}
+
+Visitor --> UC1
+Visitor --> UC2
+Visitor --> UC3
+
+Member --|> Visitor
+Member --> UC4
+Member --> UC5
+
+Author --|> Member
+Author --> UC6
+Author --> UC7
+
+Admin --|> Author
+Admin --> UC8
+Admin --> UC9
+Admin --> UC10
+Admin --> UC11
+Admin --> UC12
+
+@enduml

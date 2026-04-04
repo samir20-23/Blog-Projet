@@ -1,0 +1,132 @@
+@startuml
+skinparam linetype ortho
+
+package "User Management" {
+    entity "users" {
+        + id [PK]
+        --
+        name: string
+        email: string
+        password: string
+        is_admin: boolean
+        status: string
+        deleted_at: timestamp
+    }
+
+    entity "profiles" {
+        + id [PK]
+        --
+        user_id [FK]
+        bio: text
+        avatar: string
+    }
+
+    entity "roles" {
+        + id [PK]
+        --
+        name: string
+        slug: string
+    }
+
+    entity "permissions" {
+        + id [PK]
+        --
+        name: string
+        slug: string
+    }
+
+    entity "role_user" {
+        + role_id [FK]
+        + user_id [FK]
+    }
+
+    entity "permission_role" {
+        + permission_id [FK]
+        + role_id [FK]
+    }
+}
+
+package "Content Management" {
+    entity "articles" {
+        + id [PK]
+        --
+        title: string
+        slug: string
+        user_id [FK]
+        category_id [FK]
+        excerpt: text
+        content: text
+        status: string
+        is_featured: boolean
+        views: integer
+        deleted_at: timestamp
+    }
+
+    entity "categories" {
+        + id [PK]
+        --
+        name: string
+        slug: string
+        parent_id [FK]
+        status: string
+        deleted_at: timestamp
+    }
+
+    entity "tags" {
+        + id [PK]
+        --
+        name: string
+        slug: string
+        status: string
+    }
+
+    entity "article_tag" {
+        + article_id [FK]
+        + tag_id [FK]
+    }
+
+    entity "comments" {
+        + id [PK]
+        --
+        content: text
+        article_id [FK]
+        user_id [FK] (nullable)
+        name: string (guest)
+        email: string (guest)
+        status: string
+        deleted_at: timestamp
+    }
+}
+
+package "Core System" {
+    entity "settings" {
+        + id [PK]
+        --
+        key: string
+        value: text
+        group: string
+    }
+
+    entity "media" {
+        + id [PK]
+        --
+        file_name: string
+        mime_type: string
+        mediable_id: integer
+        mediable_type: string
+    }
+}
+
+users ||--o| profiles : has
+users ||--o{ articles : creates
+users ||--o{ comments : writes
+users }|--|{ roles : assigned
+roles }|--|{ permissions : has
+
+articles }|--|| categories : belongs_to
+articles }|--|{ tags : labeled
+articles ||--o{ comments : has
+articles ||--o{ media : polymorphic
+categories ||--o{ categories : "parent_id"
+
+@enduml

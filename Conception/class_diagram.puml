@@ -1,0 +1,86 @@
+@startuml
+package "App\\Models" {
+    class User {
+        + name: string
+        + email: string
+        + is_admin: boolean
+        + roles(): BelongsToMany
+        + profile(): HasOne
+    }
+    class Article {
+        + title: string
+        + slug: string
+        + excerpt: text
+        + content: text
+        + status: enum
+        + user(): BelongsTo
+        + category(): BelongsTo
+        + tags(): BelongsToMany
+        + comments(): HasMany
+        + media(): MorphMany
+    }
+    class Category {
+        + name: string
+        + slug: string
+        + parent(): BelongsTo
+        + children(): HasMany
+    }
+    class Comment {
+        + content: text
+        + status: enum
+        + article(): BelongsTo
+        + user(): BelongsTo
+    }
+    class Role {
+        + name: string
+        + slug: string
+    }
+    class Permission {
+        + name: string
+        + slug: string
+    }
+}
+
+package "App\\Services" {
+    class ArticleService {
+        + getAllArticles()
+        + getPublishedArticles()
+        + createArticle(data)
+        + updateArticle(article, data)
+        + deleteArticle(article)
+    }
+    class CategoryService {
+        + getAllCategories()
+        + createCategory(data)
+    }
+    class TerminologyService {
+        + getTerms()
+        + updateTerms(data)
+    }
+}
+
+package "App\\Policies" {
+    class ArticlePolicy {
+        + viewAny(user)
+        + view(user, article)
+        + create(user)
+        + update(user, article)
+        + delete(user, article)
+    }
+}
+
+User "1" *-- "*" Article : created_by
+User "1" *-- "1" Profile : has
+Article "*" -- "1" Category : belongs_to
+Article "1" *-- "*" Comment : has
+Article "*" -- "*" Tag : has
+User "1" *-- "*" Comment : wrote
+User "*" -- "*" Role : has
+Role "*" -- "*" Permission : has
+
+ArticleService ..> Article : manages
+CategoryService ..> Category : manages
+ArticlePolicy ..> User : authorizes
+ArticlePolicy ..> Article : authorizes
+
+@enduml
