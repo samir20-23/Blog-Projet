@@ -1,10 +1,6 @@
-@extends('adminlte::page')
+@extends('layouts.admin')
 
-@section('title', 'Comments')
-
-@section('content_header')
-    <h1>Comments</h1>
-@stop
+@section('header', app_term('categories'))
 
 @section('content')
     <div class="card">
@@ -39,4 +35,4 @@
             </table>
         </div>
     </div>
-@stop
+@endsection

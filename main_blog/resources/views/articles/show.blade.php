@@ -1,110 +1,162 @@
 @extends('layouts.visitor')
 
+@section('title', $article->seo_title ?? $article->title)
+
 @section('content')
-<div class="container mx-auto px-6 py-12 max-w-5xl">
-    <div class="mb-12">
-        <a href="{{ route('articles.home') }}" class="inline-flex items-center gap-2 text-slate-500 hover:text-blue-600 font-bold transition-all group">
-            <div class="w-10 h-10 rounded-full bg-white shadow-sm border flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
-                <i class="fas fa-arrow-left"></i>
-            </div>
-            <span>Back to Stories</span>
-        </a>
-    </div>
+<article class="pt-24 pb-24 border-b border-slate-100 bg-white">
+    <div class="container mx-auto px-6">
+        <div class="max-w-4xl mx-auto space-y-16">
+            <!-- Header -->
+            <header class="text-center space-y-10 uppercase tracking-tighter italic">
+                <div class="flex items-center justify-center gap-4 text-xs font-black text-blue-600 tracking-widest leading-none">
+                    <a href="{{ route('articles.category', $article->category->slug) }}" class="hover:underline transition-all">
+                        {{ $article->category->name ?? 'Uncategorized' }}
+                    </a>
+                    <span class="w-1.5 h-1.5 bg-slate-200 rounded-full"></span>
+                    <span>{{ $article->created_at->format('M d, Y') }}</span>
+                    <span class="w-1.5 h-1.5 bg-slate-200 rounded-full"></span>
+                    <span>{{ number_format($article->views) }} Views</span>
+                </div>
 
-    <article class="bg-white rounded-[3rem] shadow-2xl shadow-slate-100 overflow-hidden border border-slate-50 relative">
-        <div class="p-12 md:p-20">
-            <div class="flex flex-wrap items-center gap-4 mb-8">
-                @if($article->category)
-                <span class="px-6 py-2 bg-blue-50 text-blue-600 text-xs font-black rounded-full uppercase lg:tracking-widest">{{ $article->category->name }}</span>
+                <h1 class="text-5xl md:text-8xl font-black text-slate-900 leading-[0.9] tracking-tighter">
+                    {{ $article->title }}
+                </h1>
+
+                @if($article->excerpt)
+                <p class="text-xl text-slate-500 font-medium normal-case tracking-normal leading-relaxed max-w-2xl mx-auto not-italic">
+                    {{ $article->excerpt }}
+                </p>
                 @endif
-                <div class="flex items-center gap-4 text-slate-400 text-sm font-bold ml-auto sm:ml-0">
-                    <span class="flex items-center gap-2"><i class="far fa-calendar-alt text-blue-400"></i>{{ $article->created_at->format('M d, Y') }}</span>
-                    <span class="flex items-center gap-2"><i class="far fa-clock text-blue-400"></i>5 min read</span>
+
+                <div class="flex items-center justify-center gap-4 pt-4 border-t border-slate-50 inline-flex mx-auto">
+                    <div class="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400 font-bold overflow-hidden border border-slate-200">
+                        @if($article->user->profile && $article->user->profile->avatar)
+                            <img src="{{ asset('storage/'.$article->user->profile->avatar) }}" class="w-full h-full object-cover">
+                        @else
+                            {{ substr($article->user->name, 0, 1) }}
+                        @endif
+                    </div>
+                    <div class="text-left not-italic tracking-normal normal-case">
+                        <p class="font-bold text-slate-900 text-sm leading-none mb-1">{{ $article->user->name }}</p>
+                        <p class="text-[10px] uppercase font-black tracking-widest text-slate-400">Content Architect</p>
+                    </div>
                 </div>
+            </header>
+
+            <!-- Featured Image -->
+            @if($article->featured_image)
+            <div class="rounded-[40px] overflow-hidden aspect-[16/9] shadow-2xl shadow-slate-200/50">
+                <img src="{{ asset('storage/'.$article->featured_image) }}" class="w-full h-full object-cover" alt="{{ $article->title }}">
             </div>
+            @endif
 
-            <h1 class="text-5xl md:text-7xl font-black text-slate-900 mb-12 tracking-tighter leading-tight">{{ $article->title }}</h1>
-
-            <div class="flex items-center gap-6 p-6 bg-slate-50 rounded-3xl mb-16 border border-slate-100">
-                <div class="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center text-white text-2xl font-black shadow-lg">
-                    {{ substr($article->user->name ?? 'A', 0, 1) }}
-                </div>
-                <div>
-                    <span class="text-slate-400 text-xs font-black uppercase tracking-widest block mb-1">Author / Storyteller</span>
-                    <h4 class="text-xl font-bold text-slate-900">{{ $article->user->name ?? 'Admin User' }}</h4>
-                </div>
-            </div>
-
-            <div class="prose prose-xl max-w-none text-slate-700 font-medium leading-[1.8] space-y-8">
+            <!-- Content -->
+            <div class="prose prose-slate prose-lg max-w-none prose-headings:font-black prose-headings:uppercase prose-headings:tracking-tighter prose-p:leading-relaxed prose-p:text-slate-600 prose-strong:text-slate-900 prose-img:rounded-3xl shadow-none border-none">
                 {!! nl2br(e($article->content)) !!}
             </div>
 
-            @if($article->tag)
-            <div class="mt-20 pt-10 border-t border-slate-100 flex flex-wrap gap-3">
-                <span class="px-5 py-2.5 bg-slate-900 text-white rounded-2xl text-sm font-black flex items-center gap-2 transition-all hover:-translate-y-1 shadow-lg shadow-slate-200">
-                    <i class="fas fa-hashtag text-slate-400"></i>
-                    {{ $article->tag->name }}
-                </span>
+            <!-- Tags -->
+            @if($article->tags->count() > 0)
+            <div class="pt-12 border-t border-slate-50 flex flex-wrap gap-3 uppercase tracking-tighter italic">
+                @foreach($article->tags as $tag)
+                    <span class="px-6 py-3 bg-slate-50 text-slate-500 rounded-2xl text-[10px] font-black border border-slate-100 transition-colors hover:border-blue-400 hover:text-blue-600 cursor-pointer">
+                        #{{ $tag->name }}
+                    </span>
+                @endforeach
             </div>
             @endif
         </div>
-    </article>
+    </div>
+</article>
 
-    <section class="mt-24 max-w-3xl mx-auto">
-        <h3 class="text-4xl font-black text-slate-900 mb-12 tracking-tight flex items-baseline gap-4">
-            Comments
-            <span class="text-blue-600 text-xl font-black bg-blue-50 px-4 py-1 rounded-2xl">{{ $article->comments->count() }}</span>
-        </h3>
+<!-- Comments Section -->
+<section class="py-24 bg-slate-50 uppercase tracking-tighter">
+    <div class="container mx-auto px-6">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-4xl font-extrabold italic text-slate-900 mb-16">{{ app_term('comments') }} ({{ $article->comments->count() }})</h2>
 
-        <div class="space-y-8 mb-16">
-            @foreach($article->comments as $comment)
-            <div class="flex gap-6 items-start group">
-                <div class="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 font-black text-xl shadow-sm flex-shrink-0 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-300">
-                    {{ substr($comment->user->name ?? 'A', 0, 1) }}
-                </div>
-                <div class="bg-white p-8 rounded-[2rem] shadow-xl shadow-slate-100 border border-slate-50 flex-grow relative transition-all duration-300 hover:shadow-2xl hover:border-indigo-100">
-                    <div class="flex justify-between items-center mb-4">
-                        <h4 class="font-black text-slate-900 border-b-2 border-transparent group-hover:border-indigo-600 transition-all">{{ $comment->user->name ?? 'Unknown User' }}</h4>
-                        <span class="text-xs text-slate-300 font-bold uppercase tracking-widest">{{ $comment->created_at->diffForHumans() }}</span>
-                    </div>
-                    <p class="text-slate-600 font-medium leading-relaxed italic">"{{ $comment->content }}"</p>
-                </div>
-            </div>
-            @endforeach
-
-            @if($article->comments->isEmpty())
-            <div class="text-center py-20 bg-white rounded-[2rem] border-2 border-dashed border-slate-100">
-                <p class="text-slate-400 font-black text-xl">Be the first to share your thoughts!</p>
-            </div>
-            @endif
-        </div>
-
-        <div class="bg-slate-900 p-10 md:p-16 rounded-[3rem] shadow-2xl relative overflow-hidden group">
-            <div class="absolute top-0 right-0 p-8 opacity-10 transform group-hover:scale-110 transition-all duration-1000">
-                <i class="fas fa-quote-right text-[10rem] text-white"></i>
-            </div>
-            
-            <div class="relative z-10">
-                <h4 class="text-3xl font-black text-white mb-4 tracking-tight">Join the conversation.</h4>
-                <p class="text-slate-400 font-medium mb-10">Your feedback helps our storytellers grow.</p>
-                
-                @auth
-                <form action="{{ route('comments.store') }}" method="POST">
+            <!-- Comment Form -->
+            <div class="bg-white p-10 rounded-[32px] shadow-sm border border-slate-100 mb-16 normal-case tracking-normal not-italic">
+                <h3 class="text-xl font-bold text-slate-800 mb-6 uppercase tracking-tighter italic">Join the discussion</h3>
+                <form action="{{ route('comments.store') }}" method="POST" class="space-y-6">
                     @csrf
                     <input type="hidden" name="article_id" value="{{ $article->id }}">
-                    <div class="mb-8">
-                        <textarea name="content" rows="5" class="w-full p-8 bg-slate-800 border-none rounded-3xl focus:ring-4 focus:ring-blue-600/50 text-white placeholder-slate-500 font-medium transition-all shadow-inner outline-none" required placeholder="What's on your mind?"></textarea>
+                    
+                    @guest
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label for="name" class="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Your Name</label>
+                            <input type="text" name="name" id="name" required class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none">
+                        </div>
+                        <div class="space-y-2">
+                            <label for="email" class="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Your Email</label>
+                            <input type="email" name="email" id="email" required class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none">
+                        </div>
                     </div>
-                    <button type="submit" class="bg-blue-600 text-white font-black px-12 py-5 rounded-2xl shadow-2xl shadow-blue-900 hover:bg-blue-700 transition-all transform hover:-translate-y-1">Send Comment</button>
+                    @endguest
+
+                    <div class="space-y-2">
+                        <label for="content" class="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Message</label>
+                        <textarea name="content" id="content" rows="6" required 
+                                  class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all outline-none overflow-hidden resize-none"
+                                  placeholder="What are your thoughts on this?"></textarea>
+                    </div>
+
+                    <button type="submit" class="bg-blue-600 text-white px-10 py-4 rounded-xl font-black text-sm uppercase tracking-widest shadow-xl shadow-blue-500/20 hover:bg-blue-700 transition-soft flex items-center gap-3">
+                        Submit Comment
+                    </button>
                 </form>
-                @else
-                <div class="text-center py-10 bg-slate-800 rounded-[2rem] border border-slate-700">
-                    <p class="text-slate-300 font-bold text-lg mb-8 uppercase tracking-widest underline decoration-blue-600 decoration-4">Authorization required</p>
-                    <a href="{{ route('login') }}" class="bg-blue-600 text-white font-black px-12 py-4 rounded-xl shadow-xl hover:bg-blue-700 transition-all transform hover:scale-105 inline-block">Login to Comment</a>
+            </div>
+
+            <!-- Comments List -->
+            <div class="space-y-10 normal-case tracking-normal not-italic">
+                @forelse($article->comments->where('status', 'approved') as $comment)
+                <div class="flex gap-6 pb-10 border-b border-slate-100 last:border-0 group">
+                    <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xl flex-shrink-0 shadow-lg shadow-blue-200/20">
+                        {{ substr($comment->name ?? $comment->user->name, 0, 1) }}
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-4">
+                            <h4 class="font-bold text-slate-900">{{ $comment->name ?? $comment->user->name }}</h4>
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">{{ $comment->created_at->diffForHumans() }}</span>
+                        </div>
+                        <p class="text-slate-600 leading-relaxed max-w-2xl">{{ $comment->content }}</p>
+                        <button class="text-xs font-black uppercase tracking-widest text-blue-600 hover:text-blue-800 transition-colors opacity-0 group-hover:opacity-100 transition-soft">
+                            Reply
+                        </button>
+                    </div>
                 </div>
-                @endauth
+                @empty
+                    <div class="text-center py-10 uppercase tracking-tighter">
+                        <p class="text-lg font-black text-slate-300">BE THE FIRST TO COMMENT</p>
+                    </div>
+                @endforelse
             </div>
         </div>
-    </section>
-</div>
+    </div>
+</section>
+
+<!-- Related Articles -->
+@if($relatedArticles->count() > 0)
+<section class="py-24 bg-white uppercase tracking-tighter italic">
+    <div class="container mx-auto px-6">
+        <h2 class="text-4xl font-extrabold text-slate-900 mb-16 text-center leading-none">Related <br> <span class="text-blue-600">Discoveries</span></h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+            @foreach($relatedArticles as $related)
+            <a href="{{ route('articles.show', $related->slug) }}" class="group block space-y-6">
+                <div class="relative aspect-video rounded-[32px] overflow-hidden shadow-xl shadow-slate-200/50">
+                    <img src="{{ $related->featured_image ? asset('storage/'.$related->featured_image) : 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80' }}" 
+                         class="w-full h-full object-cover group-hover:scale-110 transition-soft">
+                </div>
+                <div>
+                    <h3 class="text-2xl font-black text-slate-900 group-hover:text-blue-600 transition-soft line-clamp-2 leading-tight">
+                        {{ $related->title }}
+                    </h3>
+                </div>
+            </a>
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
 @endsection

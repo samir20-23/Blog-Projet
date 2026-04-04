@@ -1,83 +1,86 @@
 <?php
+
 namespace App\Http\Controllers;
-use App\Models\User;
+
 use App\Models\Article;
 use App\Models\Category;
-use App\Models\Tag;
+use App\Services\ArticleService;
+use App\Services\CategoryService;
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
-    public function index()
-    {
-        $articles = Article::with(['category', 'user'])->get();
-        return view('admin.articles.index', compact('articles'));
-    }
+    protected $articleService;
+    protected $categoryService;
 
-    public function create()
+    public function __construct(ArticleService $articleService, CategoryService $categoryService)
     {
-        $categories = Category::all();
-        $tags = Tag::all();
-        return view('admin.articles.create', compact('categories','tags'));
-    }
-
-    public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required',
-            'category_id' => 'nullable|exists:categories,id',
-            'tags_id' => 'nullable|exists:tags,id',
-        ]);
-        Article::create([
-            'title' => $validatedData['title'],
-            'content' => $validatedData['content'],
-            'category_id' => $validatedData['category_id'] ?? null,
-            'tags_id' => $validatedData['tags_id'] ?? 1,
-            'user_id' => auth()->id() ?? 1,
-        ]);
-        return redirect()->route('admin.articles.index');
-    }
-
-    public function edit(Article $article)
-    {
-        $categories = Category::all();
-        $tags = Tag::all();
-        return view('admin.articles.edit', compact('article', 'categories', 'tags'));
-    }
-
-    public function update(Request $request, Article $article)
-    {
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required',
-            'category_id' => 'nullable|exists:categories,id',
-            'tags_id' => 'nullable|exists:tags,id',
-        ]);
-        $article->update([
-            'title' => $validatedData['title'],
-            'content' => $validatedData['content'],
-            'category_id' => $validatedData['category_id'] ?? null,
-            'tags_id' => $validatedData['tags_id'] ?? 1,
-        ]);
-        return redirect()->route('admin.articles.index');
-    }
-
-    public function destroy(Article $article)
-    {
-        $article->delete();
-        return redirect()->route('admin.articles.index');
-    }
-
-    public function show(Article $article)
-    {
-        $article->load(['category', 'user', 'comments.user', 'tag']);
-        return view('articles.show', compact('article'));
+        $this->articleService = $articleService;
+        $this->categoryService = $categoryService;
     }
 
     public function home()
     {
-        $articles = Article::with(['category', 'user'])->latest()->get();
-        return view('home', compact('articles'));
+        $featuredArticles = Article::with(['category', 'user'])
+            ->where('is_featured', true)
+            ->where('status', 'published')
+            ->latest()
+            ->take(3)
+            ->get();
+
+        $articles = $this->articleService->getPublishedArticles(12);
+        $categories = $this->categoryService->getAllCategories();
+
+        return view('home', compact('articles', 'featuredArticles', 'categories'));
+    }
+
+    public function show($slug)
+    {
+        $article = Article::with(['category', 'user', 'comments.user', 'tags'])
+            ->where('slug', $slug)
+            ->where('status', 'published')
+            ->firstOrFail();
+
+        $this->articleService->incrementViews($article);
+        
+        $relatedArticles = Article::where('category_id', $article->category_id)
+            ->where('id', '!=', $article->id)
+            ->where('status', 'published')
+            ->take(3)
+            ->get();
+
+        return view('articles.show', compact('article', 'relatedArticles'));
+    }
+
+    public function category(Category $category)
+    {
+        $articles = Article::where('category_id', $category->id)
+            ->where('status', 'published')
+            ->latest()
+            ->paginate(12);
+
+        return view('articles.category', compact('category', 'articles'));
+    }
+
+    public function storeComment(Request $request)
+    {
+        $validated = $request->validate([
+            'content' => 'required|string|max:1000',
+            'article_id' => 'required|exists:articles,id',
+            'name' => 'required_if:auth,false|string|max:255',
+            'email' => 'required_if:auth,false|email|max:255',
+        ]);
+
+        $article = Article::findOrFail($validated['article_id']);
+        
+        $comment = $article->comments()->create([
+            'content' => $validated['content'],
+            'user_id' => auth()->id(),
+            'name' => auth()->check() ? auth()->user()->name : ($validated['name'] ?? 'Guest'),
+            'email' => auth()->check() ? auth()->user()->email : ($validated['email'] ?? ''),
+            'status' => 'pending'
+        ]);
+
+        return back()->with('success', __('Your comment has been submitted for moderation.'));
     }
 }

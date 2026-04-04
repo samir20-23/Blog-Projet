@@ -1,10 +1,6 @@
-@extends('adminlte::page')
+@extends('layouts.admin')
 
-@section('title', 'Create Tag')
-
-@section('content_header')
-    <h1>Create Tag</h1>
-@stop
+@section('header', app_term('categories'))
 
 @section('content')
     <div class="card card-primary">
@@ -21,4 +17,4 @@
             </div>
         </form>
     </div>
-@stop
+@endsection

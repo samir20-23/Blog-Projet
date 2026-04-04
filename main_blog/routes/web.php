@@ -1,27 +1,38 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\CommentController as AdminCommentController;
+use App\Http\Controllers\Admin\TagController as AdminTagController;
+use App\Http\Controllers\Admin\PageController as AdminPageController;
+use App\Http\Controllers\Admin\SettingController as AdminSettingController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\ArticleController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\TagController;
-use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get('/', [ArticleController::class, 'home'])->name('articles.home');
-Route::get('/article/{article}', [ArticleController::class, 'show'])->name('articles.show');
-Route::post('/comment', [CommentController::class, 'store'])->name('comments.store')->middleware('auth');
+// Visitor Routes
+Route::get('/', [ArticleController::class, 'home'])->name('home');
+Route::get('/article/{slug}', [ArticleController::class, 'show'])->name('articles.show');
+Route::post('/comment', [ArticleController::class, 'storeComment'])->name('comments.store');
+Route::get('/category/{slug}', [ArticleController::class, 'category'])
+    ->name('articles.category');
+// Admin Routes
+// Admin Routes
+Route::prefix('admin')->middleware(['auth', 'is_admin'])->name('admin.')->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::resource('articles', AdminArticleController::class);
+    Route::resource('categories', AdminCategoryController::class);
+    
+    // REMOVE THE // FROM THESE LINES BELOW:
+    Route::resource('tags', AdminTagController::class);
+    Route::resource('comments', AdminCommentController::class);
+    Route::resource('pages', AdminPageController::class);
+    Route::resource('users', AdminUserController::class);
+    Route::resource('settings', AdminSettingController::class);
 
-Route::prefix('admin')->middleware(['auth', 'is_admin'])->group(function () {
-    Route::get('/', function () { return redirect()->route('admin.articles.index'); });
-    Route::get('/dashboard', function () { return view('admin.dashboard'); })->name('admin.dashboard');
-    Route::resource('articles', ArticleController::class, ['as' => 'admin']);
-    Route::resource('categories', CategoryController::class, ['as' => 'admin']);
-    Route::resource('tags', TagController::class, ['as' => 'admin']);
-    Route::resource('comments', CommentController::class, ['as' => 'admin'])->only(['index', 'destroy']);
-});
-
-Route::get('/articles', function () {
-    return redirect()->route('admin.articles.index');
-});
+    
+}); 

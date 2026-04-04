@@ -1,10 +1,6 @@
-@extends('adminlte::page')
+@extends('layouts.admin')
 
-@section('title', 'Edit Tag')
-
-@section('content_header')
-    <h1>Edit Tag</h1>
-@stop
+@section('header', app_term('categories'))
 
 @section('content')
     <div class="card card-warning">

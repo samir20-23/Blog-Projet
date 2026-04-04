@@ -1,20 +1,20 @@
 @extends('adminlte::page')
 
-@section('title', 'Tags')
+    @section('title', 'Tags')
 
-@section('content_header')
-    <div class="d-flex justify-content-between">
-        <h1>Tags</h1>
-        <a href="{{ route('admin.tags.create') }}" class="btn btn-primary">Create Tag</a>
-    </div>
-@stop
+    @section('content_header')
+        <div class="d-flex justify-content-between">
+            <h1>Tags</h1>
+            <a href="{{ route('admin.tags.create') }}" class="btn btn-primary">Create Tag</a>
+        </div>
+    @stop
 
-@section('content')
+    @section('content')
     <div class="card">
         <div class="card-body p-0">
             <table class="table table-striped">
                 <thead>
-                    <tr>
+                    
                         <th style="width: 10px">#</th>
                         <th>Name</th>
                         <th style="width: 150px">Actions</th>
