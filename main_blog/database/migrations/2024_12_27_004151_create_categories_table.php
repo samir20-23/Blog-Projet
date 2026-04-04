@@ -12,10 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('categories', function (Blueprint $table) {
-            $table->id()->autoIncrement();
+            $table->id();
             $table->string('name');
-            $table->string('description');
+            $table->string('slug')->unique()->nullable();
+            $table->text('description')->nullable();
+            $table->string('image')->nullable();
+            $table->foreignId('parent_id')->nullable()->constrained('categories')->onDelete('set null');
+            $table->integer('sort_order')->default(0);
+            $table->string('status')->default('active');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

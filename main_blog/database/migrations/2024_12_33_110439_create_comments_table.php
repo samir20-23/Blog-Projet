@@ -13,10 +13,15 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->string('content');
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->text('content');
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('article_id')->constrained('articles')->onDelete('cascade');
+            $table->foreignId('parent_id')->nullable()->constrained('comments')->onDelete('cascade');
+            $table->string('name')->nullable();
+            $table->string('email')->nullable();
+            $table->string('status')->default('pending'); // pending, approved, rejected
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
